@@ -1,15 +1,34 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Shell
-    x:Class="AllinWallet.AppShell"
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:AllinWallet"
-    Shell.FlyoutBehavior="Disabled"
-    Title="AllinWallet">
+<Shell x:Class="AllinWallet.AppShell"
+       xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:local="clr-namespace:AllinWallet"
+       xmlns:page="clr-namespace:AllinWallet.Pages"
+       Shell.FlyoutBehavior="Disabled"
+       Title="AllinWallet">
 
-    <ShellContent
-        Title="AllinWallet"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    <!-- Phone -->
+    <TabBar x:Name="PhoneTabs">
+        <Tab Title="Home"
+             Icon="home_tab.svg">
+            <ShellContent ContentTemplate="{DataTemplate page:Dashboard}" />
+        </Tab>
+        <Tab Title="Nexi"
+             Icon="nexi_tab.svg">
+            <ShellContent ContentTemplate="{DataTemplate page:Nexi}" />
+        </Tab>
+        <Tab Title="Satispay"
+             Icon="satispay_tab.png">
+            <ShellContent ContentTemplate="{DataTemplate page:Satispay}" />
+        </Tab>
+        <Tab Title="Settings"
+             Icon="settings_tab">
+            <ShellContent ContentTemplate="{DataTemplate page:Settings}" />
+        </Tab>
+    </TabBar>
+
+    <ShellContent Title="AllinWallet"
+                  ContentTemplate="{DataTemplate local:MainPage}"
+                  Route="MainPage" />
 
 </Shell>

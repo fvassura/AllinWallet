@@ -54,9 +54,9 @@
 		<MauiSplashScreen Include="Resources\Splash\logoaiw_splash.png" Color="#759CAF" BaseSize="256,256" />
 
     <!-- Aggiungi le immagini in diverse risoluzioni -->
-    <MauiImage Include="Resources\Images\logoaiw.png" />
+    <!--<MauiImage Include="Resources\Images\logoaiw.png" />-->
 		<!-- Images -->
-		<!--<MauiImage Include="Resources\Images\*" />-->
+		<MauiImage Include="Resources\Images\*" />
 		<!--<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />-->
 
     <!-- Custom Fonts -->
@@ -79,12 +79,25 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Pages\Dashboard.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Nexi.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Satispay.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Settings.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Resources\Styles\ColorsLight - Copy %282%29.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -94,6 +107,11 @@
 	  <MauiXaml Update="Resources\Styles\ColorsLight.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Models\" />
+	  <Folder Include="Services\" />
 	</ItemGroup>
 
 </Project>

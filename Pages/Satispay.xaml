@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AllinWallet.Pages.Satispay"
+             Title="Satispay">
+
+    <ContentPage.Content>
+        <StackLayout Padding="20">
+            <!-- Pulsante per scegliere il file -->
+            <Button Text="Scegli un file"
+                    Command="{Binding ChooseFileCommand}"
+                    ContentLayout="Left, 10">
+                <Button.ImageSource>
+                    <FontImageSource Glyph="&#xe2c8;"
+                                     FontFamily="MaterialIcons"
+                                     Size="24"
+                                     Color="White" />
+                </Button.ImageSource>
+            </Button>
+
+            <!-- Storico delle azioni effettuate -->
+            <Label Text="Storico delle azioni"
+                   FontAttributes="Bold"
+                   Margin="0,20,0,5"
+                   FontSize="Medium" />
+
+            <CollectionView ItemsSource="{Binding ImportHistory}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Margin="0,5"
+                               Padding="10"
+                               BorderColor="LightGray"
+                               HasShadow="True">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type local:SatispayViewModel}}, Path=ItemTappedCommand}"
+                                                      CommandParameter="{Binding .}" />
+                            </Frame.GestureRecognizers>
+                            <StackLayout Orientation="Horizontal"
+                                         Spacing="10">
+                                <!-- Icona per TipoFile -->
+                                <Label FontFamily="MaterialSymbols"
+                                       FontSize="24"
+                                       TextColor="Gray">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label"
+                                                     Binding="{Binding Tipo}"
+                                                     Value="Csv">
+                                            <Setter Property="Text"
+                                                    Value="file_open" />
+                                            <!-- Icona per CSV -->
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Label"
+                                                     Binding="{Binding Tipo}"
+                                                     Value="Pdf">
+                                            <Setter Property="Text"
+                                                    Value="picture_as_pdf" />
+                                            <!-- Icona per PDF -->
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+
+                                <!-- Dettagli file -->
+                                <StackLayout>
+                                    <Label Text="{Binding DataImport, StringFormat='Data: {0:dd/MM/yyyy}'}"
+                                           FontAttributes="Bold"
+                                           FontSize="Small"
+                                           TextColor="Gray" />
+                                    <Label Text="{Binding Nome}"
+                                           FontSize="Medium"
+                                           FontAttributes="Bold"
+                                           Margin="0,5,0,0" />
+
+                                    <!-- Icona Elaborato (Checkbox) -->
+                                    <Label FontFamily="MaterialSymbols"
+                                           FontSize="24"
+                                           TextColor="Green">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label"
+                                                         Binding="{Binding Elaborato}"
+                                                         Value="True">
+                                                <Setter Property="Text"
+                                                        Value="check_box" />
+                                                <!-- Checkbox spuntata -->
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Label"
+                                                         Binding="{Binding Elaborato}"
+                                                         Value="False">
+                                                <Setter Property="Text"
+                                                        Value="check_box_outline_blank" />
+                                                <!-- Checkbox non spuntata -->
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
+                                </StackLayout>
+                            </StackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

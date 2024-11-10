@@ -14,9 +14,9 @@
             count++;
 
             if (count == 1)
-                CounterBtn.Text = $"Clicked {count} time";
+                CounterBtn.Text = $"Clicked {count} time ";
             else
-                CounterBtn.Text = $"Clicked {count} times ciao";
+                CounterBtn.Text = $"Clicked {count} times ciao e se non ricompi";
 
             SemanticScreenReader.Announce(CounterBtn.Text);
         }
