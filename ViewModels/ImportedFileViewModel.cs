@@ -1,10 +1,7 @@
-﻿namespace AllinWallet.ViewModels
+﻿using AllinWallet.Models;
+
+namespace AllinWallet.ViewModels
 {
-    public enum TipoFile
-    {
-        Csv,
-        Pdf
-    }
 
 
     public class ImportedFileViewModel

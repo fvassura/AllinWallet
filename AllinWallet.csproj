@@ -24,7 +24,7 @@
 		<ApplicationTitle>AllinWallet</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.allinwallet</ApplicationId>
+		<ApplicationId>com.fvassu.allinwallet</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
@@ -98,9 +98,6 @@
 	  <MauiXaml Update="Pages\Settings.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Resources\Styles\ColorsLight - Copy %282%29.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
 	  <MauiXaml Update="Resources\Styles\ColorsDark.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -110,7 +107,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Models\" />
 	  <Folder Include="Services\" />
 	</ItemGroup>
 
