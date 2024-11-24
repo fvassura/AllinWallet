@@ -9,7 +9,7 @@
         <StackLayout Padding="20">
             <!-- Pulsante per scegliere il file -->
             <Button Text="Scegli un file"
-                    Command="{Binding ChooseFileCommand}"
+                    Command="{Binding ScegliFileCommand}"
                     ContentLayout="Left, 10">
                 <Button.ImageSource>
                     <FontImageSource Glyph="&#xe2c8;"
@@ -25,7 +25,7 @@
                    Margin="0,20,0,5"
                    FontSize="Medium" />
             <StackLayout>
-                <CollectionView ItemsSource="{Binding ImportHistory}"
+                <CollectionView ItemsSource="{Binding ConvertedFileList}"
                                 VerticalScrollBarVisibility="Always">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
@@ -33,12 +33,23 @@
                                    Padding="10"
                                    BorderColor="LightGray"
                                    HasShadow="True">
-                                <Frame.GestureRecognizers>
+                                <!--<Frame.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type local:SatispayViewModel}}, Path=ItemTappedCommand}"
                                                           CommandParameter="{Binding .}" />
-                                </Frame.GestureRecognizers>
+                                </Frame.GestureRecognizers>-->
+                              
                                 <StackLayout Orientation="Horizontal"
                                              Spacing="10">
+                                    
+                                    <Button Command="{Binding Source={RelativeSource AncestorType={x:Type local:SatispayViewModel}}, Path=ConvertiCommand}"
+                                            CommandParameter="{Binding .}">
+                                        <Button.ImageSource>
+                                            <FontImageSource FontFamily="MaterialIcons"
+                                                             Glyph="&#xf0c9;" />
+                                            <!-- Icona di esempio -->
+                                        </Button.ImageSource>
+                                        <Button.Text>Elaborazione</Button.Text>
+                                    </Button>
                                     <!-- Icona per TipoFile -->
                                     <Label FontFamily="MaterialSymbols"
                                            FontSize="24"

@@ -4,7 +4,7 @@ namespace AllinWallet.ViewModels
 {
 
 
-    public class ImportedFileViewModel
+    public class ConvertedFileViewModel
     {
         public TipoFile Tipo { get; set; }
         public DateTime DataImport { get; set; }

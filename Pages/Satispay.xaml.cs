@@ -4,9 +4,9 @@ namespace AllinWallet.Pages;
 
 public partial class Satispay : ContentPage
 {
-    public Satispay()
+    public Satispay(SatispayViewModel viewModel)
     {
         InitializeComponent();
-        BindingContext = new SatispayViewModel();
+        BindingContext = viewModel;
     }
 }

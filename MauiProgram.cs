@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using AllinWallet.Services;
+using AllinWallet.ViewModels;
+using Microsoft.Extensions.Logging;
 
 namespace AllinWallet
 {
@@ -19,6 +21,13 @@ namespace AllinWallet
             builder.ConfigureFonts(fonts =>
             {
             });
+
+            // Registrazione dei servizi
+
+            builder.Services.AddSingleton<IStorageService, BaseStorageService>();
+
+            builder.Services.AddSingleton<SatispayViewModel>();
+            builder.Services.AddSingleton<NexiViewModel>();
 
 #if DEBUG
             builder.Logging.AddDebug();
