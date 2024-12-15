@@ -1,4 +1,5 @@
-﻿using AllinWallet.Services;
+﻿using AllinWallet.Pages;
+using AllinWallet.Services;
 using AllinWallet.ViewModels;
 using Microsoft.Extensions.Logging;
 
@@ -26,7 +27,10 @@ namespace AllinWallet
 
             builder.Services.AddSingleton<IStorageService, BaseStorageService>();
 
+            builder.Services.AddSingleton<Satispay>();
             builder.Services.AddSingleton<SatispayViewModel>();
+
+            builder.Services.AddSingleton<Nexi>();
             builder.Services.AddSingleton<NexiViewModel>();
 
 #if DEBUG

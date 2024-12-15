@@ -17,8 +17,9 @@ namespace AllinWallet.ViewModels
         private TipoFile csv;
 
         public ICommand ScegliFileCommand { get; }
-        public ICommand ItemTappedCommand { get; }
         public ICommand ConvertiCommand { get; }
+
+
         public ObservableCollection<ConvertedFileViewModel> ConvertedFileList { get; }
 
         public BaseConvertionListViewModel(IStorageService storageService, TipoFile tipoFile, string baseFolderName)
@@ -29,11 +30,17 @@ namespace AllinWallet.ViewModels
             this._baseFolderName = baseFolderName;
 
             ScegliFileCommand = new Command(OnScegliFile);
-            ItemTappedCommand = new Command<ConvertedFileViewModel>(OnItemTapped);
             ConvertiCommand = new Command<ConvertedFileViewModel>(OnConverti);
 
-            ConvertedFileList = LoadConvertedFileList();
 
+            ConvertedFileList = new ObservableCollection<ConvertedFileViewModel>();
+
+        }
+
+
+        internal void OnPageAppearing()
+        {
+            LoadConvertedFileList();
         }
 
 
@@ -53,13 +60,25 @@ namespace AllinWallet.ViewModels
         }
 
 
-        private ObservableCollection<ConvertedFileViewModel> LoadConvertedFileList()
+        private void LoadConvertedFileList()
         {
-            return new ObservableCollection<ConvertedFileViewModel>()
-                {
-                    new ConvertedFileViewModel { DataImport = DateTime.Now, Nome = "Esempio di Import 1", Tipo = TipoFile.Csv },
-                    new ConvertedFileViewModel { DataImport = DateTime.Now.AddDays(-1), Nome = "Esempio di Import 2", Tipo = TipoFile.Pdf }
-                };
+
+            ConvertedFileList.Clear();
+            //TODO: mettere il recupero da db sqlite
+            /*     this.ConvertedFileList.Add(new ConvertedFileViewModel { DataImport = DateTime.Now, Nome = "Esempio di Import 1", Tipo = TipoFile.Csv, Elaborato = false, OutputFile = @"/storare/app/data/com.allinwallet/saty02.csv" });
+                 this.ConvertedFileList.Add(new ConvertedFileViewModel { DataImport = DateTime.Now.AddDays(-1), Nome = "Esempio di Import 2", Tipo = TipoFile.Pdf, Elaborato = true, OutputFile = @"/storare/app/data/com.allinwallet/saty.db" });
+                 this.ConvertedFileList.Add(new ConvertedFileViewModel { DataImport = DateTime.Now, Nome = "Esempio di Import 1", Tipo = TipoFile.Csv, Elaborato = false, OutputFile = @"/storare/app/data/com.allinwallet/saty02.csv" });
+                 this.ConvertedFileList.Add(new ConvertedFileViewModel { DataImport = DateTime.Now.AddDays(-1), Nome = "Esempio di Import 2", Tipo = TipoFile.Pdf, Elaborato = true, OutputFile = @"/storare/app/data/com.allinwallet/saty.db" });
+                 this.ConvertedFileList.Add(new ConvertedFileViewModel { DataImport = DateTime.Now, Nome = "Esempio di Import 1", Tipo = TipoFile.Csv, Elaborato = false, OutputFile = @"/storare/app/data/com.allinwallet/saty02.csv" });
+                 this.ConvertedFileList.Add(new ConvertedFileViewModel { DataImport = DateTime.Now.AddDays(-1), Nome = "Esempio di Import 2", Tipo = TipoFile.Pdf, Elaborato = true, OutputFile = @"/storare/app/data/com.allinwallet/saty.db" });
+                 this.ConvertedFileList.Add(new ConvertedFileViewModel { DataImport = DateTime.Now, Nome = "Esempio di Import 1", Tipo = TipoFile.Csv, Elaborato = false, OutputFile = @"/storare/app/data/com.allinwallet/saty02.csv" });
+                 this.ConvertedFileList.Add(new ConvertedFileViewModel { DataImport = DateTime.Now.AddDays(-1), Nome = "Esempio di Import 2", Tipo = TipoFile.Pdf, Elaborato = true, OutputFile = @"/storare/app/data/com.allinwallet/saty.db" });
+                 this.ConvertedFileList.Add(new ConvertedFileViewModel { DataImport = DateTime.Now, Nome = "Esempio di Import 1", Tipo = TipoFile.Csv, Elaborato = false, OutputFile = @"/storare/app/data/com.allinwallet/saty02.csv" });
+                 this.ConvertedFileList.Add(new ConvertedFileViewModel { DataImport = DateTime.Now.AddDays(-1), Nome = "Esempio di Import 2", Tipo = TipoFile.Pdf, Elaborato = true, OutputFile = @"/storare/app/data/com.allinwallet/saty.db" });
+                 this.ConvertedFileList.Add(new ConvertedFileViewModel { DataImport = DateTime.Now, Nome = "Esempio di Import 1", Tipo = TipoFile.Csv, Elaborato = false, OutputFile = @"/storare/app/data/com.allinwallet/saty02.csv" });
+                 this.ConvertedFileList.Add(new ConvertedFileViewModel { DataImport = DateTime.Now.AddDays(-1), Nome = "Esempio di Import 2", Tipo = TipoFile.Pdf, Elaborato = true, OutputFile = @"/storare/app/data/com.allinwallet/saty.db" });
+
+             */
         }
 
         private async void OnScegliFile()
@@ -128,21 +147,12 @@ namespace AllinWallet.ViewModels
             return result;
         }
 
-        private async void OnItemTapped(ConvertedFileViewModel item)
-        {
-            if (item != null)
-            {
-                await Application.Current.MainPage.DisplayAlert("Elemento selezionato", $"Hai selezionato: {item.Nome}", "OK");
-            }
-
-        }
-
 
         private async void OnConverti(ConvertedFileViewModel item)
         {
             if (item != null)
             {
-                await Application.Current.MainPage.DisplayAlert("Conversione", $"Hai selezionato: {item.Nome}", "OK");
+                await Application.Current.MainPage.DisplayAlert("Conversione", $"Hai selezionato: {item.Nome} #{this.ConvertedFileList.IndexOf(item)}", "OK");
             }
         }
     }

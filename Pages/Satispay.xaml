@@ -26,58 +26,70 @@
                    FontSize="Medium" />
             <StackLayout>
                 <CollectionView ItemsSource="{Binding ConvertedFileList}"
-                                VerticalScrollBarVisibility="Always">
+                                VerticalScrollBarVisibility="Always"
+                                HeightRequest="550">
+
+                    <CollectionView.EmptyView>
+                        <Label Text="Nessun elemento trovato"
+                               HorizontalOptions="Center"
+                               VerticalOptions="StartAndExpand"
+                               Margin="0,20"/>
+                    </CollectionView.EmptyView>
+                    
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Frame Margin="0,5"
-                                   Padding="10"
+                                   Padding="5"
                                    BorderColor="LightGray"
                                    HasShadow="True">
-                                <!--<Frame.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type local:SatispayViewModel}}, Path=ItemTappedCommand}"
-                                                          CommandParameter="{Binding .}" />
-                                </Frame.GestureRecognizers>-->
-                              
+                                 
                                 <StackLayout Orientation="Horizontal"
                                              Spacing="10">
-                                    
-                                    <Button Command="{Binding Source={RelativeSource AncestorType={x:Type local:SatispayViewModel}}, Path=ConvertiCommand}"
-                                            CommandParameter="{Binding .}">
-                                        <Button.ImageSource>
-                                            <FontImageSource FontFamily="MaterialIcons"
-                                                             Glyph="&#xf0c9;" />
-                                            <!-- Icona di esempio -->
-                                        </Button.ImageSource>
-                                        <Button.Text>Elaborazione</Button.Text>
+                                     
+                                        <Button Style="{StaticResource BlackRoundedButton}"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:SatispayViewModel}}, Path=ConvertiCommand}"
+                                                CommandParameter="{Binding .}">
+                                            <Button.ImageSource>
+                                                <FontImageSource Glyph="&#xe1c4;"
+                                                                 FontFamily="MaterialSymbols"
+                                                                 Size="24"
+                                                                 Color="black" />
+                                                <!-- Icona di esempio -->
+                                            </Button.ImageSource>
+                                        <Button.Text  >Converti</Button.Text>
                                     </Button>
-                                    <!-- Icona per TipoFile -->
-                                    <Label FontFamily="MaterialSymbols"
-                                           FontSize="24"
-                                           TextColor="Gray">
-                                        <Label.Triggers>
-                                            <DataTrigger TargetType="Label"
-                                                         Binding="{Binding Tipo}"
-                                                         Value="Csv">
-                                                <Setter Property="Text"
-                                                        Value="file_open" />
-                                                <!-- Icona per CSV -->
-                                            </DataTrigger>
-                                            <DataTrigger TargetType="Label"
-                                                         Binding="{Binding Tipo}"
-                                                         Value="Pdf">
-                                                <Setter Property="Text"
-                                                        Value="picture_as_pdf" />
-                                                <!-- Icona per PDF -->
-                                            </DataTrigger>
-                                        </Label.Triggers>
-                                    </Label>
+                                 
 
                                     <!-- Dettagli file -->
                                     <StackLayout>
-                                        <Label Text="{Binding DataImport, StringFormat='Data: {0:dd/MM/yyyy}'}"
-                                               FontAttributes="Bold"
-                                               FontSize="Small"
-                                               TextColor="Gray" />
+                                        <FlexLayout  Direction="Row"
+                                                     JustifyContent="SpaceBetween" >
+                                            <Label Text="{Binding DataImport, StringFormat='Data: {0:dd/MM/yyyy}'}"
+                                                   FontAttributes="Bold"
+                                                   FontSize="Small"
+                                                   TextColor="Gray" />
+                                            <!-- Icona per TipoFile -->
+                                            <Label FontFamily="MaterialSymbols"
+                                                   FontSize="20"
+                                                   TextColor="Gray">
+                                                <Label.Triggers>
+                                                    <DataTrigger TargetType="Label"
+                                                                 Binding="{Binding Tipo}"
+                                                                 Value="Csv">
+                                                        <Setter Property="Text"
+                                                                Value="csv" />
+                                                        <!-- Icona per CSV -->
+                                                    </DataTrigger>
+                                                    <DataTrigger TargetType="Label"
+                                                                 Binding="{Binding Tipo}"
+                                                                 Value="Pdf">
+                                                        <Setter Property="Text"
+                                                                Value="picture_as_pdf" />
+                                                        <!-- Icona per PDF -->
+                                                    </DataTrigger>
+                                                </Label.Triggers>
+                                            </Label>
+                                        </FlexLayout>
                                         <StackLayout Orientation="Horizontal"
                                                      Spacing="10">
                                             <Label Text="{Binding Nome}"

@@ -49,6 +49,37 @@
         </Setter>
     </Style>
 
+    <Style TargetType="Button"
+           x:Key="BlackRoundedButton">
+        <Setter Property="BackgroundColor"
+                Value="#f0f4f8" />
+        <Setter Property="TextColor"
+                Value="Black" />
+        <Setter Property="CornerRadius"
+                Value="18" />
+        <!-- Angoli arrotondati -->
+        <Setter Property="Padding"
+                Value="12,6" />
+        <Setter Property="FontSize"
+                Value="12" />
+        <Setter Property="FontAttributes"
+                Value="Bold" />
+        <Setter Property="HeightRequest"
+                Value="40" />
+        <Setter Property="Shadow">
+            <Shadow Brush="#000000"
+                    Opacity="0.5"
+                    Offset="5,5"
+                    Radius="4" />
+        </Setter>
+        <Setter Property="ContentLayout"
+                Value="Left,10" />
+        <Setter Property="HorizontalOptions"
+                Value="Start" />
+        <Setter Property="VerticalOptions"
+                Value="Center" />
+    </Style>
+
     <Style TargetType="CheckBox">
         <Setter Property="Color" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}" />
         <Setter Property="MinimumHeightRequest" Value="44"/>
