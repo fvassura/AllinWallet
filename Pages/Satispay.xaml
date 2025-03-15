@@ -4,6 +4,10 @@
              xmlns:local="clr-namespace:AllinWallet.ViewModels"
              x:Class="AllinWallet.Pages.Satispay"
              Title="Satispay">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem IconImageSource="satispay_tab.png" />
+    </ContentPage.ToolbarItems>
+
 
     <ContentPage.Content>
         <StackLayout Padding="20">
@@ -25,7 +29,7 @@
                    Margin="0,20,0,5"
                    FontSize="Medium" />
             <StackLayout>
-                <CollectionView ItemsSource="{Binding ConvertedFileList}"
+                <CollectionView ItemsSource="{Binding ConvertedFileListVM}"
                                 VerticalScrollBarVisibility="Always"
                                 HeightRequest="550">
 
@@ -33,45 +37,46 @@
                         <Label Text="Nessun elemento trovato"
                                HorizontalOptions="Center"
                                VerticalOptions="StartAndExpand"
-                               Margin="0,20"/>
+                               Margin="0,20" />
                     </CollectionView.EmptyView>
-                    
+
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Frame Margin="0,5"
                                    Padding="5"
                                    BorderColor="LightGray"
                                    HasShadow="True">
-                                 
+
                                 <StackLayout Orientation="Horizontal"
                                              Spacing="10">
-                                     
-                                        <Button Style="{StaticResource BlackRoundedButton}"
-                                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:SatispayViewModel}}, Path=ConvertiCommand}"
-                                                CommandParameter="{Binding .}">
-                                            <Button.ImageSource>
-                                                <FontImageSource Glyph="&#xe1c4;"
-                                                                 FontFamily="MaterialSymbols"
-                                                                 Size="24"
-                                                                 Color="black" />
-                                                <!-- Icona di esempio -->
-                                            </Button.ImageSource>
-                                        <Button.Text  >Converti</Button.Text>
+
+                                    <Button Style="{StaticResource BlackRoundedButton}"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type local:SatispayViewModel}}, Path=ConvertiCommand}"
+                                            CommandParameter="{Binding .}">
+                                        <Button.ImageSource>
+                                            <FontImageSource Glyph="&#xe1c4;"
+                                                             FontFamily="MaterialSymbols"
+                                                             Size="24"
+                                                             Color="black" />
+                                            <!-- Icona di esempio -->
+                                        </Button.ImageSource>
+                                        <Button.Text>Converti</Button.Text>
                                     </Button>
-                                 
 
                                     <!-- Dettagli file -->
                                     <StackLayout>
-                                        <FlexLayout  Direction="Row"
-                                                     JustifyContent="SpaceBetween" >
-                                            <Label Text="{Binding DataImport, StringFormat='Data: {0:dd/MM/yyyy}'}"
+                                        <FlexLayout  Direction="Row">
+                                            <Label Text="{Binding DataCreazione, StringFormat='Data: {0:dd/MM/yyyy}'}"
                                                    FontAttributes="Bold"
                                                    FontSize="Small"
-                                                   TextColor="Gray" />
+                                                   TextColor="Gray"
+                                                   Margin="0,1,7,0" />
                                             <!-- Icona per TipoFile -->
                                             <Label FontFamily="MaterialSymbols"
                                                    FontSize="20"
-                                                   TextColor="Gray">
+                                                   TextColor="Gray"
+                                                   Margin="0,1,24,0"
+                                                   >
                                                 <Label.Triggers>
                                                     <DataTrigger TargetType="Label"
                                                                  Binding="{Binding Tipo}"
@@ -87,31 +92,23 @@
                                                                 Value="picture_as_pdf" />
                                                         <!-- Icona per PDF -->
                                                     </DataTrigger>
-                                                </Label.Triggers>
+                                                </Label.Triggers>                                                
                                             </Label>
-                                        </FlexLayout>
-                                        <StackLayout Orientation="Horizontal"
-                                                     Spacing="10">
-                                            <Label Text="{Binding Nome}"
-                                                   FontSize="Medium"
-                                                   FontAttributes="Bold"
-                                                   Margin="0,5,0,0" />
 
                                             <!-- Icona Elaborato (Checkbox) -->
                                             <Label FontFamily="MaterialSymbols"
                                                    FontSize="24"
-                                                   TextColor="Gray"
-                                                   Margin="0,5,0,0">
+                                                   TextColor="Gray">
                                                 <Label.Triggers>
                                                     <DataTrigger TargetType="Label"
-                                                                 Binding="{Binding Elaborato}"
+                                                                 Binding="{Binding Convertito}"
                                                                  Value="True">
                                                         <Setter Property="Text"
                                                                 Value="check_box" />
                                                         <!-- Checkbox spuntata -->
                                                     </DataTrigger>
                                                     <DataTrigger TargetType="Label"
-                                                                 Binding="{Binding Elaborato}"
+                                                                 Binding="{Binding Convertito}"
                                                                  Value="False">
                                                         <Setter Property="Text"
                                                                 Value="check_box_outline_blank" />
@@ -119,10 +116,20 @@
                                                     </DataTrigger>
                                                 </Label.Triggers>
                                             </Label>
+                                        </FlexLayout>
+                                        <StackLayout Orientation="Horizontal"
+                                                     Spacing="10">
+                                            <Label Text="{Binding Nome}"
+                                                   FontSize="Small"
+                                                   FontAttributes="Bold"
+                                                   Margin="0,5,0,0" />
+
                                         </StackLayout>
                                         <Label Text="{Binding OutputFile}"
                                                FontSize="Micro"
-                                               TextColor="Gray" />
+                                               TextColor="Gray"
+                                               LineBreakMode="WordWrap"
+                                               WidthRequest="200" />
                                     </StackLayout>
                                 </StackLayout>
                             </Frame>
@@ -132,4 +139,5 @@
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>
+
 </ContentPage>

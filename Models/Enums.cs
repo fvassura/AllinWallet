@@ -1,9 +1,10 @@
 ﻿namespace AllinWallet.Models
 {
-    public enum TipoFile
+    public enum TipoConversione
     {
         Csv,
         Pdf
     }
+
 
 }

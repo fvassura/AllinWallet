@@ -11,7 +11,7 @@
     <TabBar x:Name="PhoneTabs">
         <Tab Title="Home"
              Icon="home_tab.svg">
-            <ShellContent ContentTemplate="{DataTemplate page:Dashboard}" />
+            <ShellContent ContentTemplate="{DataTemplate page:Dashboard}"  />
         </Tab>
         <Tab Title="Nexi"
              Icon="nexi_tab.svg">

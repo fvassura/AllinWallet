@@ -7,7 +7,6 @@ namespace AllinWallet.Services
         string CopyInputToWork(FileResult result, string baseInputPath);
         string GetStoragePath();
 
-        //Task<string> SaveFileAsync(string fileName, string content);
     }
 
 }

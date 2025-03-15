@@ -1,11 +1,13 @@
-﻿using AllinWallet.Services;
+﻿using AllinWallet.Models;
+using AllinWallet.Services;
+using AllinWallet.Services.SQLite;
 
 namespace AllinWallet.ViewModels
 {
     public class NexiViewModel : BaseConvertionListViewModel
     {
-        public NexiViewModel(IStorageService storageService) :
-            base(storageService, Models.TipoFile.Csv, "Nexi")
+        public NexiViewModel(IStorageService storageService, SQLiteRepository<ConvertedFile> repo) :
+            base(storageService, Models.TipoConversione.Csv, "Nexi", repo)
         {
 
         }

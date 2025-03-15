@@ -1,5 +1,7 @@
-﻿using AllinWallet.Pages;
+﻿using AllinWallet.Models;
+using AllinWallet.Pages;
 using AllinWallet.Services;
+using AllinWallet.Services.SQLite;
 using AllinWallet.ViewModels;
 using Microsoft.Extensions.Logging;
 
@@ -24,8 +26,22 @@ namespace AllinWallet
             });
 
             // Registrazione dei servizi
+            builder.Services.AddSingleton<IStorageService>(serviceProvider =>
+            {
+#if ANDROID
+                    return new AllinWallet.Platforms.Android.Services.StorageService();
+#elif IOS
+                // Implementazione iOS se ne hai una
+                return new AllinWallet.Platforms.iOS.Services.StorageService();
+#else
+                return new BaseStorageService();
+#endif
+            });
 
-            builder.Services.AddSingleton<IStorageService, BaseStorageService>();
+
+            builder.Services.AddSingleton<SQLiteService>();
+            builder.Services.AddTransient<SQLiteRepository<ConvertedFile>>();
+
 
             builder.Services.AddSingleton<Satispay>();
             builder.Services.AddSingleton<SatispayViewModel>();

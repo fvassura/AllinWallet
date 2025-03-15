@@ -1,5 +1,6 @@
 ﻿using AllinWallet.Models;
 using AllinWallet.Services;
+using AllinWallet.Services.SQLite;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -10,39 +11,38 @@ namespace AllinWallet.ViewModels
     public class BaseConvertionListViewModel : ObservableObject
     {
         private readonly IStorageService _storageService;
-        private TipoFile TipoFile = TipoFile.Csv;
+        private readonly SQLiteRepository<ConvertedFile> _convertedFileRepository;
+
+        private TipoConversione TipoFile = TipoConversione.Csv;
         private string _baseFolderName;
         private string baseInputPath;
         private string baseOutputPath;
-        private TipoFile csv;
+        private TipoConversione csv;
 
         public ICommand ScegliFileCommand { get; }
         public ICommand ConvertiCommand { get; }
 
+        public ObservableCollection<ConvertedFileViewModel> ConvertedFileListVM { get; }
 
-        public ObservableCollection<ConvertedFileViewModel> ConvertedFileList { get; }
-
-        public BaseConvertionListViewModel(IStorageService storageService, TipoFile tipoFile, string baseFolderName)
+        public BaseConvertionListViewModel(IStorageService storageService, TipoConversione tipoFile, string baseFolderName, SQLiteRepository<ConvertedFile> repo)
         {
             _storageService = storageService;
+            _convertedFileRepository = repo;
 
             this.TipoFile = tipoFile;
             this._baseFolderName = baseFolderName;
+            Task.Run(async () => await InitializeStorageAsync());
 
-            ScegliFileCommand = new Command(OnScegliFile);
-            ConvertiCommand = new Command<ConvertedFileViewModel>(OnConverti);
+            ScegliFileCommand = new Command(async () => await OnScegliFile());
+            ConvertiCommand = new Command<ConvertedFileViewModel>(async (item) => await OnConverti(item));
 
-
-            ConvertedFileList = new ObservableCollection<ConvertedFileViewModel>();
-
+            ConvertedFileListVM = new ObservableCollection<ConvertedFileViewModel>();
         }
 
-
-        internal void OnPageAppearing()
+        internal async void OnPageAppearing()
         {
-            LoadConvertedFileList();
+            await LoadConvertedFileList();
         }
-
 
         public async Task<bool> InitializeStorageAsync()
         {
@@ -56,63 +56,62 @@ namespace AllinWallet.ViewModels
             this.baseInputPath = Path.Combine(storagePath, _baseFolderName);
             this.baseOutputPath = Path.Combine(storagePath, _baseFolderName, "output");
 
+            if (!Directory.Exists(baseInputPath))
+            {
+                Directory.CreateDirectory(baseInputPath);
+            }
+
+            if (!Directory.Exists(baseOutputPath))
+            {
+                Directory.CreateDirectory(baseOutputPath);
+            }
+
             return true;
         }
 
-
-        private void LoadConvertedFileList()
+        private async Task LoadConvertedFileList()
         {
+            ConvertedFileListVM.Clear();
 
-            ConvertedFileList.Clear();
-            //TODO: mettere il recupero da db sqlite
-            /*     this.ConvertedFileList.Add(new ConvertedFileViewModel { DataImport = DateTime.Now, Nome = "Esempio di Import 1", Tipo = TipoFile.Csv, Elaborato = false, OutputFile = @"/storare/app/data/com.allinwallet/saty02.csv" });
-                 this.ConvertedFileList.Add(new ConvertedFileViewModel { DataImport = DateTime.Now.AddDays(-1), Nome = "Esempio di Import 2", Tipo = TipoFile.Pdf, Elaborato = true, OutputFile = @"/storare/app/data/com.allinwallet/saty.db" });
-                 this.ConvertedFileList.Add(new ConvertedFileViewModel { DataImport = DateTime.Now, Nome = "Esempio di Import 1", Tipo = TipoFile.Csv, Elaborato = false, OutputFile = @"/storare/app/data/com.allinwallet/saty02.csv" });
-                 this.ConvertedFileList.Add(new ConvertedFileViewModel { DataImport = DateTime.Now.AddDays(-1), Nome = "Esempio di Import 2", Tipo = TipoFile.Pdf, Elaborato = true, OutputFile = @"/storare/app/data/com.allinwallet/saty.db" });
-                 this.ConvertedFileList.Add(new ConvertedFileViewModel { DataImport = DateTime.Now, Nome = "Esempio di Import 1", Tipo = TipoFile.Csv, Elaborato = false, OutputFile = @"/storare/app/data/com.allinwallet/saty02.csv" });
-                 this.ConvertedFileList.Add(new ConvertedFileViewModel { DataImport = DateTime.Now.AddDays(-1), Nome = "Esempio di Import 2", Tipo = TipoFile.Pdf, Elaborato = true, OutputFile = @"/storare/app/data/com.allinwallet/saty.db" });
-                 this.ConvertedFileList.Add(new ConvertedFileViewModel { DataImport = DateTime.Now, Nome = "Esempio di Import 1", Tipo = TipoFile.Csv, Elaborato = false, OutputFile = @"/storare/app/data/com.allinwallet/saty02.csv" });
-                 this.ConvertedFileList.Add(new ConvertedFileViewModel { DataImport = DateTime.Now.AddDays(-1), Nome = "Esempio di Import 2", Tipo = TipoFile.Pdf, Elaborato = true, OutputFile = @"/storare/app/data/com.allinwallet/saty.db" });
-                 this.ConvertedFileList.Add(new ConvertedFileViewModel { DataImport = DateTime.Now, Nome = "Esempio di Import 1", Tipo = TipoFile.Csv, Elaborato = false, OutputFile = @"/storare/app/data/com.allinwallet/saty02.csv" });
-                 this.ConvertedFileList.Add(new ConvertedFileViewModel { DataImport = DateTime.Now.AddDays(-1), Nome = "Esempio di Import 2", Tipo = TipoFile.Pdf, Elaborato = true, OutputFile = @"/storare/app/data/com.allinwallet/saty.db" });
-                 this.ConvertedFileList.Add(new ConvertedFileViewModel { DataImport = DateTime.Now, Nome = "Esempio di Import 1", Tipo = TipoFile.Csv, Elaborato = false, OutputFile = @"/storare/app/data/com.allinwallet/saty02.csv" });
-                 this.ConvertedFileList.Add(new ConvertedFileViewModel { DataImport = DateTime.Now.AddDays(-1), Nome = "Esempio di Import 2", Tipo = TipoFile.Pdf, Elaborato = true, OutputFile = @"/storare/app/data/com.allinwallet/saty.db" });
-
-             */
+            var savedFiles = await _convertedFileRepository.GetAllAsync();
+            foreach (var file in savedFiles)
+            {
+                ConvertedFileListVM.Add(new ConvertedFileViewModel(file));
+            }
         }
 
-        private async void OnScegliFile()
+        private async Task OnScegliFile()
         {
             try
             {
                 // Selezione del file
                 var result = await FilePicker.PickAsync(new PickOptions
                 {
-                    FileTypes = GetCustomFileType(),
+                    FileTypes = null, //GetCustomFileType(),
                     PickerTitle = $"Scegli un file {TipoFile}"
                 });
 
                 if (result != null)
                 {
-
-                    var workDir = this._storageService.CopyInputToWork(result, baseInputPath);
-
+                    var fileName = result.FileName;
+                    var fileFullPathIn = _storageService.CopyInputToWork(result, baseInputPath);
 
                     // Esegui azioni come la lettura del file, importazione, ecc.
-                    await Application.Current.MainPage.DisplayAlert("File selezionato", $"File {result.FileName} importato in : {workDir} ", "OK");
+                    await Application.Current.MainPage.DisplayAlert("File selezionato", $"File {result.FileName} importato in : {fileFullPathIn} ", "OK");
 
-
-
-                    /*
-                    // Aggiungi lo storico del file scelto
-                    ConvertedFileList.Add(new ConvertedFileViewModel
+                    var newVM = new ConvertedFileViewModel()
                     {
-                        DataImport = DateTime.Now,
-                        Nome = userFileName,
-                        Tipo = userFileName.EndsWith(".csv") ? TipoFile.Csv : TipoFile.Pdf,
-                        Elaborato = false,
-                        OutputFile = userFilePath
-                    });*/
+                        DataCreazione = DateTime.Now,
+                        Nome = fileName,
+                        InputFile = fileFullPathIn,
+                        Tipo = this.TipoFile,
+                        Convertito = false,
+                        OutputFile = Path.Combine(baseOutputPath, fileName)
+                    };
+
+                    await _convertedFileRepository.SaveAsync(newVM.ToModel());
+
+                    await LoadConvertedFileList();
                 }
             }
             catch (Exception ex)
@@ -120,39 +119,13 @@ namespace AllinWallet.ViewModels
                 // Gestisci errori, ad esempio se non è stato scelto un file
                 await Application.Current.MainPage.DisplayAlert("Errore", ex.Message, "OK");
             }
-
         }
 
-        private FilePickerFileType GetCustomFileType()
-        {
-            FilePickerFileType result = FilePickerFileType.Jpeg;
-
-            switch (TipoFile)
-            {
-                case TipoFile.Csv:
-                    result = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
-                                    {
-                                        { DevicePlatform.iOS, new[] { "public.comma-separated-values-text", "public.text" } }, // Aggiungi il tipo generico per CSV su iOS
-                                        { DevicePlatform.Android, new[] { "text/csv", "application/vnd.ms-excel" } }, // Includi anche altri formati di file Excel
-                                        { DevicePlatform.WinUI, new[] { ".csv", ".xls" } }, // Aggiungi anche Excel per Windows
-                                        { DevicePlatform.macOS, new[] { "csv", "text/csv" } }, // Aggiungi supporto generico per CSV su macOS
-                                    });
-                    break;
-
-                case TipoFile.Pdf:
-                    result = FilePickerFileType.Pdf;
-                    break;
-            }
-
-            return result;
-        }
-
-
-        private async void OnConverti(ConvertedFileViewModel item)
+        private async Task OnConverti(ConvertedFileViewModel item)
         {
             if (item != null)
             {
-                await Application.Current.MainPage.DisplayAlert("Conversione", $"Hai selezionato: {item.Nome} #{this.ConvertedFileList.IndexOf(item)}", "OK");
+                await Application.Current.MainPage.DisplayAlert("Conversione", $"Hai selezionato: {item.Nome} #{ConvertedFileListVM.IndexOf(item)}", "OK");
             }
         }
     }
