@@ -27,8 +27,4 @@
         </Tab>
     </TabBar>
 
-    <ShellContent Title="AllinWallet"
-                  ContentTemplate="{DataTemplate local:MainPage}"
-                  Route="MainPage" />
-
 </Shell>

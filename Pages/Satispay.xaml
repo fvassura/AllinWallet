@@ -8,7 +8,6 @@
         <ToolbarItem IconImageSource="satispay_tab.png" />
     </ContentPage.ToolbarItems>
 
-
     <ContentPage.Content>
         <StackLayout Padding="20">
             <!-- Pulsante per scegliere il file -->
@@ -42,97 +41,107 @@
 
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Frame Margin="0,5"
-                                   Padding="5"
-                                   BorderColor="LightGray"
-                                   HasShadow="True">
+                            <SwipeView>
+                                <SwipeView.LeftItems>
+                                    <SwipeItems>
+                                        <SwipeItem Text="Delete"
+                                                   BackgroundColor="Red"
+                                                   IconImageSource="delete.png"
+                                                   Command="{Binding Source={RelativeSource AncestorType={x:Type local:SatispayViewModel}}, Path=DeleteCommand}"
+                                                   CommandParameter="{Binding .}" />
+                                    </SwipeItems>
+                                </SwipeView.LeftItems>
+                                <Frame Margin="0,5"
+                                       Padding="5"
+                                       BorderColor="LightGray"
+                                       HasShadow="True">
 
-                                <StackLayout Orientation="Horizontal"
-                                             Spacing="10">
+                                    <StackLayout Orientation="Horizontal"
+                                                 Spacing="10">
 
-                                    <Button Style="{StaticResource BlackRoundedButton}"
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type local:SatispayViewModel}}, Path=ConvertiCommand}"
-                                            CommandParameter="{Binding .}">
-                                        <Button.ImageSource>
-                                            <FontImageSource Glyph="&#xe1c4;"
-                                                             FontFamily="MaterialSymbols"
-                                                             Size="24"
-                                                             Color="black" />
-                                            <!-- Icona di esempio -->
-                                        </Button.ImageSource>
-                                        <Button.Text>Converti</Button.Text>
-                                    </Button>
+                                        <Button Style="{StaticResource BlackRoundedButton}"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:SatispayViewModel}}, Path=ConvertiCommand}"
+                                                CommandParameter="{Binding .}">
+                                            <Button.ImageSource>
+                                                <FontImageSource Glyph="&#xe1c4;"
+                                                                 FontFamily="MaterialSymbols"
+                                                                 Size="24"
+                                                                 Color="black" />
+                                                <!-- Icona di esempio -->
+                                            </Button.ImageSource>
+                                            <Button.Text>Converti</Button.Text>
+                                        </Button>
 
-                                    <!-- Dettagli file -->
-                                    <StackLayout>
-                                        <FlexLayout  Direction="Row">
-                                            <Label Text="{Binding DataCreazione, StringFormat='Data: {0:dd/MM/yyyy}'}"
-                                                   FontAttributes="Bold"
-                                                   FontSize="Small"
+                                        <!-- Dettagli file -->
+                                        <StackLayout>
+                                            <FlexLayout  Direction="Row">
+                                                <Label Text="{Binding DataCreazione, StringFormat='Data: {0:dd/MM/yyyy}'}"
+                                                       FontAttributes="Bold"
+                                                       FontSize="Small"
+                                                       TextColor="Gray"
+                                                       Margin="0,1,7,0" />
+                                                <!-- Icona per TipoFile -->
+                                                <Label FontFamily="MaterialSymbols"
+                                                       FontSize="20"
+                                                       TextColor="Gray"
+                                                       Margin="0,1,24,0">
+                                                    <Label.Triggers>
+                                                        <DataTrigger TargetType="Label"
+                                                                     Binding="{Binding Tipo}"
+                                                                     Value="Csv">
+                                                            <Setter Property="Text"
+                                                                    Value="csv" />
+                                                            <!-- Icona per CSV -->
+                                                        </DataTrigger>
+                                                        <DataTrigger TargetType="Label"
+                                                                     Binding="{Binding Tipo}"
+                                                                     Value="Pdf">
+                                                            <Setter Property="Text"
+                                                                    Value="picture_as_pdf" />
+                                                            <!-- Icona per PDF -->
+                                                        </DataTrigger>
+                                                    </Label.Triggers>
+                                                </Label>
+
+                                                <!-- Icona Elaborato (Checkbox) -->
+                                                <Label FontFamily="MaterialSymbols"
+                                                       FontSize="24"
+                                                       TextColor="Gray">
+                                                    <Label.Triggers>
+                                                        <DataTrigger TargetType="Label"
+                                                                     Binding="{Binding Convertito}"
+                                                                     Value="True">
+                                                            <Setter Property="Text"
+                                                                    Value="check_box" />
+                                                            <!-- Checkbox spuntata -->
+                                                        </DataTrigger>
+                                                        <DataTrigger TargetType="Label"
+                                                                     Binding="{Binding Convertito}"
+                                                                     Value="False">
+                                                            <Setter Property="Text"
+                                                                    Value="check_box_outline_blank" />
+                                                            <!-- Checkbox non spuntata -->
+                                                        </DataTrigger>
+                                                    </Label.Triggers>
+                                                </Label>
+                                            </FlexLayout>
+                                            <StackLayout Orientation="Horizontal"
+                                                         Spacing="10">
+                                                <Label Text="{Binding Nome}"
+                                                       FontSize="Small"
+                                                       FontAttributes="Bold"
+                                                       Margin="0,5,0,0" />
+
+                                            </StackLayout>
+                                            <Label Text="{Binding OutputFile}"
+                                                   FontSize="Micro"
                                                    TextColor="Gray"
-                                                   Margin="0,1,7,0" />
-                                            <!-- Icona per TipoFile -->
-                                            <Label FontFamily="MaterialSymbols"
-                                                   FontSize="20"
-                                                   TextColor="Gray"
-                                                   Margin="0,1,24,0"
-                                                   >
-                                                <Label.Triggers>
-                                                    <DataTrigger TargetType="Label"
-                                                                 Binding="{Binding Tipo}"
-                                                                 Value="Csv">
-                                                        <Setter Property="Text"
-                                                                Value="csv" />
-                                                        <!-- Icona per CSV -->
-                                                    </DataTrigger>
-                                                    <DataTrigger TargetType="Label"
-                                                                 Binding="{Binding Tipo}"
-                                                                 Value="Pdf">
-                                                        <Setter Property="Text"
-                                                                Value="picture_as_pdf" />
-                                                        <!-- Icona per PDF -->
-                                                    </DataTrigger>
-                                                </Label.Triggers>                                                
-                                            </Label>
-
-                                            <!-- Icona Elaborato (Checkbox) -->
-                                            <Label FontFamily="MaterialSymbols"
-                                                   FontSize="24"
-                                                   TextColor="Gray">
-                                                <Label.Triggers>
-                                                    <DataTrigger TargetType="Label"
-                                                                 Binding="{Binding Convertito}"
-                                                                 Value="True">
-                                                        <Setter Property="Text"
-                                                                Value="check_box" />
-                                                        <!-- Checkbox spuntata -->
-                                                    </DataTrigger>
-                                                    <DataTrigger TargetType="Label"
-                                                                 Binding="{Binding Convertito}"
-                                                                 Value="False">
-                                                        <Setter Property="Text"
-                                                                Value="check_box_outline_blank" />
-                                                        <!-- Checkbox non spuntata -->
-                                                    </DataTrigger>
-                                                </Label.Triggers>
-                                            </Label>
-                                        </FlexLayout>
-                                        <StackLayout Orientation="Horizontal"
-                                                     Spacing="10">
-                                            <Label Text="{Binding Nome}"
-                                                   FontSize="Small"
-                                                   FontAttributes="Bold"
-                                                   Margin="0,5,0,0" />
-
+                                                   LineBreakMode="WordWrap"
+                                                   WidthRequest="200" />
                                         </StackLayout>
-                                        <Label Text="{Binding OutputFile}"
-                                               FontSize="Micro"
-                                               TextColor="Gray"
-                                               LineBreakMode="WordWrap"
-                                               WidthRequest="200" />
                                     </StackLayout>
-                                </StackLayout>
-                            </Frame>
+                                </Frame>
+                            </SwipeView>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>

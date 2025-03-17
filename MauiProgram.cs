@@ -43,6 +43,10 @@ namespace AllinWallet
             builder.Services.AddTransient<SQLiteRepository<ConvertedFile>>();
 
 
+            builder.Services.AddSingleton<Settings>();
+            builder.Services.AddSingleton<SettingsViewModel>();
+
+
             builder.Services.AddSingleton<Satispay>();
             builder.Services.AddSingleton<SatispayViewModel>();
 

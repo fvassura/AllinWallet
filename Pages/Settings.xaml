@@ -1,12 +1,28 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:AllinWallet.ViewModels"
              x:Class="AllinWallet.Pages.Settings"
-             Title="Settings">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+             Title="Impostazioni">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem>
+            <ToolbarItem.IconImageSource>
+                <FontImageSource Glyph="&#xe8b8;"  
+                                 FontFamily="MaterialSymbols"
+                                 Size="24"
+                                 Color="Black" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
+    
+    <VerticalStackLayout Padding="20">
+        <Label Text="Email Nexi" />
+        <Entry Text="{Binding EmailNexi}" Placeholder="Enter Nexi email" />
+
+        <Label Text="Email Satispay" />
+        <Entry Text="{Binding EmailSatispay}" Placeholder="Enter Satispay email" />
+
+        <Button Text="Save Settings" Command="{Binding SaveSettingsCommand}" />
     </VerticalStackLayout>
 </ContentPage>

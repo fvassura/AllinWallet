@@ -21,6 +21,7 @@ namespace AllinWallet.ViewModels
 
         public ICommand ScegliFileCommand { get; }
         public ICommand ConvertiCommand { get; }
+        public ICommand DeleteCommand { get; }
 
         public ObservableCollection<ConvertedFileViewModel> ConvertedFileListVM { get; }
 
@@ -35,6 +36,8 @@ namespace AllinWallet.ViewModels
 
             ScegliFileCommand = new Command(async () => await OnScegliFile());
             ConvertiCommand = new Command<ConvertedFileViewModel>(async (item) => await OnConverti(item));
+            DeleteCommand = new Command<ConvertedFileViewModel>(async (item) => await OnDelete(item));
+
 
             ConvertedFileListVM = new ObservableCollection<ConvertedFileViewModel>();
         }
@@ -126,6 +129,15 @@ namespace AllinWallet.ViewModels
             if (item != null)
             {
                 await Application.Current.MainPage.DisplayAlert("Conversione", $"Hai selezionato: {item.Nome} #{ConvertedFileListVM.IndexOf(item)}", "OK");
+            }
+        }
+
+        private async Task OnDelete(ConvertedFileViewModel item)
+        {
+            if (item != null && ConvertedFileListVM.Contains(item))
+            {
+                ConvertedFileListVM.Remove(item);
+                this._convertedFileRepository.DeleteAsync(item.Id);
             }
         }
     }
