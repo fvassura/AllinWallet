@@ -8,10 +8,10 @@ using System.Windows.Input;
 
 namespace AllinWallet.ViewModels
 {
-    public class BaseConvertionListViewModel : ObservableObject
+    public abstract class BaseConvertionListViewModel : ObservableObject
     {
-        private readonly IStorageService _storageService;
-        private readonly SQLiteRepository<ConvertedFile> _convertedFileRepository;
+        protected readonly IStorageService _storageService;
+        protected readonly SQLiteRepository<ConvertedFile> _convertedFileRepository;
 
         private TipoConversione TipoFile = TipoConversione.Csv;
         private string _baseFolderName;
@@ -19,11 +19,19 @@ namespace AllinWallet.ViewModels
         private string baseOutputPath;
         private TipoConversione csv;
 
+        private bool _isLoading;
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set => SetProperty(ref _isLoading, value);
+        }
+
         public ICommand ScegliFileCommand { get; }
         public ICommand ConvertiCommand { get; }
         public ICommand DeleteCommand { get; }
 
         public ObservableCollection<ConvertedFileViewModel> ConvertedFileListVM { get; }
+        public string TEST_EMAIL = "fvassu@gmail.com";
 
         public BaseConvertionListViewModel(IStorageService storageService, TipoConversione tipoFile, string baseFolderName, SQLiteRepository<ConvertedFile> repo)
         {
@@ -74,6 +82,7 @@ namespace AllinWallet.ViewModels
 
         private async Task LoadConvertedFileList()
         {
+            IsLoading = true;
             ConvertedFileListVM.Clear();
 
             var savedFiles = await _convertedFileRepository.GetAllAsync();
@@ -81,6 +90,8 @@ namespace AllinWallet.ViewModels
             {
                 ConvertedFileListVM.Add(new ConvertedFileViewModel(file));
             }
+
+            IsLoading = false;
         }
 
         private async Task OnScegliFile()
@@ -128,9 +139,49 @@ namespace AllinWallet.ViewModels
         {
             if (item != null)
             {
-                await Application.Current.MainPage.DisplayAlert("Conversione", $"Hai selezionato: {item.Nome} #{ConvertedFileListVM.IndexOf(item)}", "OK");
+                await this.ConvertiAction(item);
+
+                item.Convertito = true;
+                item.DataConversione = DateTime.Now;
+                await _convertedFileRepository.SaveAsync(item.ToModel());
+
+                var invioOk = await Application.Current.MainPage.DisplayAlert("Conversione", $"Hai convertito: {item.Nome} #{ConvertedFileListVM.IndexOf(item)}, vuoi inviarlo via mail?", "OK", "Annulla");
+                if (invioOk)
+                {
+                    var settings = await _storageService.LoadSettingsAsync();
+                    var emailTo = this.GetWalletEmailTo(settings);
+#if DEBUG
+                    emailTo = this.TEST_EMAIL;
+#endif
+                    if (!string.IsNullOrWhiteSpace(emailTo))
+                    {
+                        // Invia il file via email a Wallet
+                        var email = new EmailMessage
+                        {
+                            To = new List<string> { emailTo },
+                            Subject = $"CSV convertito: {item.Nome}",
+                            Body = $"Ecco il file convertito: {item.OutputFile}",
+                            Attachments = new List<EmailAttachment> { new EmailAttachment(item.OutputFile) }
+                        };
+                        await Email.ComposeAsync(email);
+
+                        await Application.Current.MainPage.DisplayAlert("Mail inviata", $"Inviato file: {item.OutputFile} per {this.TipoFile}", "OK");
+
+                    }
+                    else
+                    {
+                        await Application.Current.MainPage.DisplayAlert("Conversione", $"Non hai impostato l'email per l'invio", "OK");
+                        return;
+                    }
+
+                }
+
             }
         }
+
+        protected abstract string? GetWalletEmailTo(UserSettings settings);
+
+        protected abstract Task ConvertiAction(ConvertedFileViewModel item);
 
         private async Task OnDelete(ConvertedFileViewModel item)
         {

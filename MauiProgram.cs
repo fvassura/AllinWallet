@@ -1,8 +1,10 @@
 ﻿using AllinWallet.Models;
 using AllinWallet.Pages;
 using AllinWallet.Services;
+using AllinWallet.Services.Coverters;
 using AllinWallet.Services.SQLite;
 using AllinWallet.ViewModels;
+using Material.Components.Maui.Extensions;
 using Microsoft.Extensions.Logging;
 
 namespace AllinWallet
@@ -14,6 +16,7 @@ namespace AllinWallet
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseMaterialComponents()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -29,7 +32,7 @@ namespace AllinWallet
             builder.Services.AddSingleton<IStorageService>(serviceProvider =>
             {
 #if ANDROID
-                    return new AllinWallet.Platforms.Android.Services.StorageService();
+                return new AllinWallet.Platforms.Android.Services.StorageService();
 #elif IOS
                 // Implementazione iOS se ne hai una
                 return new AllinWallet.Platforms.iOS.Services.StorageService();
@@ -47,9 +50,12 @@ namespace AllinWallet
             builder.Services.AddSingleton<SettingsViewModel>();
 
 
+            builder.Services.AddTransient<SatispayConverter>();
             builder.Services.AddSingleton<Satispay>();
             builder.Services.AddSingleton<SatispayViewModel>();
 
+
+            builder.Services.AddTransient<NexiConverter>();
             builder.Services.AddSingleton<Nexi>();
             builder.Services.AddSingleton<NexiViewModel>();
 

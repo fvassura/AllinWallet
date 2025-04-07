@@ -46,6 +46,10 @@ namespace AllinWallet.ViewModels
                 EmailSatispay = EmailSatispay
             };
             await _storageService.SaveSettingsAsync(settings);
+
+            await Application.Current.MainPage.DisplayAlert("Conferma", "Salvataggio effettuato", "OK");
+
+
         }
     }
 }

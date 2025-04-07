@@ -2,6 +2,7 @@
 using CsvHelper;
 using CsvHelper.Configuration;
 using System.Globalization;
+using System.Text;
 
 namespace AllinWallet.Services.Coverters
 {
@@ -28,11 +29,12 @@ namespace AllinWallet.Services.Coverters
 
         public void WriteCsvModified(string filePath, List<CsvSatispay> righe)
         {
-            using (var writer = new StreamWriter(filePath))
+            using (var writer = new StreamWriter(filePath, false, Encoding.UTF8))
             {
                 using (var csv = new CsvWriter(writer, new CsvConfiguration(CultureInfo.InvariantCulture)))
                 {
                     csv.WriteRecords(righe);
+                    writer.Flush();
                 }
 
             }

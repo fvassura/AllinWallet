@@ -10,8 +10,10 @@ namespace AllinWallet.Services.Coverters
     {
 
 
-        public void ReadPdf(string? pdfFile, List<MovimentoNexi> movimentiNexi)
+        public List<MovimentoNexi> ReadPdf(string? pdfFile)
         {
+            List<MovimentoNexi> movimentiNexi = new List<MovimentoNexi>();
+
             // Apri il PDF e leggi le pagine
             using (var pdfReader = new PdfReader(pdfFile))
             {
@@ -63,6 +65,7 @@ namespace AllinWallet.Services.Coverters
                     }
                 }
             }
+            return movimentiNexi;
         }
 
         private MovimentoNexi ParseMovimento(string line)

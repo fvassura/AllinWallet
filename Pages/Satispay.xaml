@@ -22,6 +22,13 @@
                 </Button.ImageSource>
             </Button>
 
+            <!-- ActivityIndicator per il caricamento -->
+            <ActivityIndicator IsRunning="{Binding IsLoading}"
+                               IsVisible="{Binding IsLoading}"
+                               Color="{StaticResource Primary}"
+                               VerticalOptions="CenterAndExpand"
+                               HorizontalOptions="CenterAndExpand" />
+
             <!-- Storico delle azioni effettuate -->
             <Label Text="Storico delle azioni"
                    FontAttributes="Bold"
@@ -148,5 +155,4 @@
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>
-
 </ContentPage>
